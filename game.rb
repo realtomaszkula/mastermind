@@ -1,9 +1,10 @@
 class MasterMind
-
+	@@turn = 1
 	def initialize(name)
 		@player = Player.new(name)
 		@board = Board.new
 		@AI = AI.new
+		
 		play
 	end	
 
@@ -11,6 +12,7 @@ class MasterMind
 		attr_reader :name, :guess
 		def initialize(name)
 			@name = name
+			@guess = false
 		end
 
 		def get_guess
@@ -51,40 +53,39 @@ class MasterMind
 		attr_writer :guess
 
 		def initialize
-			@guess = draw_guess
-			@board = draw_board
+			@board = ""
 		end
 
-		def view_board
+		def draw_board(plr_guess)
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]}\n"
 			puts @board
-		end
-
-		private
-
-		def draw_board
-			@board = %{ }
-		end
-
-		def draw_guess
-			@guess = Array.new(4, " ")
 		end
 	end
 
 	def play
 		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
-		@player.get_guess
-		@board.view_board
-		if game_over?
-			puts " *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
+		loop do
+			puts "Turn: #{@@turn}"
+		  	@player.get_guess
+		  	@board.draw_board(@player.guess)
+			break if numberwang? || game_over?
 		end
-
-		@AI.view_numberwang
 	end
 
+	def game_over?		
+		if @@turn == 10
+			puts " *** Times Up, see you next week on NUMBERWANG! ***"
+			return true
+		end
+		@@turn += 1
+		false
+	end
 
-
-	def game_over?
-	  return true if @AI.numberwang.sort == @player.guess.sort
+	def numberwang?
+	  if @AI.numberwang.sort == @player.guess.sort 
+	  	puts " *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
+	  	return true
+	  end
 	  false
 	end
 end
