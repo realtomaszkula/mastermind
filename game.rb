@@ -40,6 +40,7 @@ class MasterMind
 		attr_reader :numberwang, :clues
 		def initialize
 			@numberwang = [rand(1..6),rand(1..6),rand(1..6),rand(1..6)]
+
 		end
 
 		def eval(plr_guess)
@@ -48,16 +49,15 @@ class MasterMind
 				whites: 0
 			}
 			
-			temp = @numberwang
 			indx = []
+			temp = numberwang.dup
 
 
 			for i in 0..5
 				indx << i if temp[i] == plr_guess[i]
 			end
 			indx.each_with_index {|x, i| temp.delete_at(x-i)}
-			clues[:blacks] = temp.size
-
+			@clues[:blacks] = 4 - temp.size
 
 
 		end
@@ -73,7 +73,7 @@ class MasterMind
 		end
 
 		def draw_board(plr_guess, ai_clues)
-			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- #{ai_clues[:blacks]} -- #{ai_clues[:whites]} \n"
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- BLACKS: #{ai_clues[:blacks]} -- WHITES: #{ai_clues[:whites]} \n"
 			puts @board
 		end
 	end
@@ -100,7 +100,7 @@ class MasterMind
 
 	def numberwang?
 	  if @AI.numberwang.sort == @player.guess.sort 
-	  	puts " *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
+	  	puts "\n *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
 	  	return true
 	  end
 	  false
