@@ -11,7 +11,6 @@ class MasterMind
 		attr_reader :name
 		def initialize(name)
 			@name = name
-			@guess = get_guess
 		end
 
 		def get_guess
@@ -22,6 +21,7 @@ class MasterMind
 				guess = gets.chomp.to_i
 			end
 
+			@guess = guess.to_s.split("").map(&:to_i)
 		end
 
 		def validate_input(guess)
@@ -61,7 +61,7 @@ class MasterMind
 		private
 
 		def draw_board
-			@board = %{\n                c   o\nx|#{@guess[0]}|#{@guess[1]}|#{@guess[2]}|#{@guess[3]}| --- | |-| |}
+			@board = %{ }
 		end
 
 		def draw_guess
@@ -70,6 +70,8 @@ class MasterMind
 	end
 
 	def play
+		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
+		@player.get_guess
 		@board.view_board
 		@AI.view_numberwang
 	end
