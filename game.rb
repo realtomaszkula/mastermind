@@ -27,7 +27,7 @@ class MasterMind
 
 		private
 		def validate_input(guess)
-			if guess.class != Fixnum || guess.to_s.size != 4
+			if guess.class != Fixnum || guess.to_s.size != 4 || guess > 6666
 				puts "Incorrect input, try again"
 				return false
 			end
@@ -83,7 +83,7 @@ class MasterMind
 		end
 
 		def draw_board(plr_guess, ai_clues, turn)
-			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} BLACKS: #{ai_clues[:blacks]} WHITES: #{ai_clues[:whites]} Turn: #{turn}\n"
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} \tBLACKS: #{ai_clues[:blacks]} WHITES: #{ai_clues[:whites]} Turn: #{turn}\n"
 			puts @board
 		end
 	end
