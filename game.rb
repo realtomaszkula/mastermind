@@ -12,7 +12,6 @@ class MasterMind
 		attr_reader :name, :guess
 		def initialize(name)
 			@name = name
-			@guess = false
 		end
 
 		def get_guess
@@ -38,14 +37,16 @@ class MasterMind
 	end
 
 	class AI
-		attr_reader :numberwang
+		attr_reader :numberwang, :clues
 		def initialize
 			@numberwang = [rand(1..6),rand(1..6),rand(1..6),rand(1..6)]
+			@clues = []
 		end
 
-		def view_numberwang
-			 p @numberwang
+		def eval(plr_guess)
+			
 		end
+		
 	end
 
 	class Board
@@ -56,8 +57,8 @@ class MasterMind
 			@board = ""
 		end
 
-		def draw_board(plr_guess)
-			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]}\n"
+		def draw_board(plr_guess, ai_clues)
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- BLACK: xx, WHITE: xx\n" #black for correct pos+color, white for correct color
 			puts @board
 		end
 	end
@@ -67,7 +68,8 @@ class MasterMind
 		loop do
 			puts "Turn: #{@@turn}"
 		  	@player.get_guess
-		  	@board.draw_board(@player.guess)
+		  	@AI.eval(@player.guess)
+		  	@board.draw_board(@player.guess, @AI.clues)
 			break if numberwang? || game_over?
 		end
 	end
