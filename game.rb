@@ -16,17 +16,16 @@ class MasterMind
 
 		def get_guess
 			puts "#{@name}, enter your guess: "
-			guess = gets.chomp
+			guess = gets.chomp.to_i
 
 			until validate_input(guess)
-				guess = gets.chomp
+				guess = gets.chomp.to_i
 			end
-
 
 		end
 
 		def validate_input(guess)
-			if guess.class != Integer && guess.size != 4
+			if guess.class != Fixnum || guess.to_s.size != 4
 				puts "Incorrect input, try again"
 				return false
 			end
