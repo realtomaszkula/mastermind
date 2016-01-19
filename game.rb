@@ -50,14 +50,31 @@ class MasterMind
 			}
 			
 			indx = []
-			temp = numberwang.dup
+			temp_wang = numberwang.dup
+			temp_plr = plr_guess.dup
 
-
-			for i in 0..5
-				indx << i if temp[i] == plr_guess[i]
+			for i in 0..3
+				indx << i if temp_wang[i] == plr_guess[i]
 			end
-			indx.each_with_index {|x, i| temp.delete_at(x-i)}
-			@clues[:blacks] = 4 - temp.size
+			indx.each_with_index {|x, i| temp_wang.delete_at(x-i)}
+			indx.each_with_index {|x, i| temp_plr.delete_at(x-i)}
+			@clues[:blacks] = 4 - temp_wang.size
+
+			p temp_wang
+			p temp_plr
+
+			# for i in 0..tempsize
+			# 	if temp[i]
+
+			# end
+
+			# indx = []
+
+			# plr_guess.each {|x| }
+
+
+			# [2,2,3]
+			# [4,2,3,1]	
 
 
 		end
