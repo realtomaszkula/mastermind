@@ -15,7 +15,7 @@ class MasterMind
 		end
 
 		def get_guess
-			puts "#{@name}, enter your guess: "
+			puts "#{@name}, enter your guess:"
 			guess = gets.chomp.to_i
 
 			until validate_input(guess)
@@ -60,23 +60,16 @@ class MasterMind
 			indx.each_with_index {|x, i| temp_plr.delete_at(x-i)}
 			@clues[:blacks] = 4 - temp_wang.size
 
-			p temp_wang
-			p temp_plr
-
-			# for i in 0..tempsize
-			# 	if temp[i]
-
-			# end
-
-			# indx = []
-
-			# plr_guess.each {|x| }
-
-
-			# [2,2,3]
-			# [4,2,3,1]	
-
-
+			alr_chkd = []
+			for i in 0..temp_wang.size-1
+				for k in 0..temp_wang.size-1
+					if temp_plr[i] == temp_wang[k] && !alr_chkd.include?(k)
+							@clues[:whites] += 1
+							alr_chkd << k
+							next
+					end	
+				end
+			end
 		end
 		
 	end
@@ -89,8 +82,8 @@ class MasterMind
 			@board = ""
 		end
 
-		def draw_board(plr_guess, ai_clues)
-			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- BLACKS: #{ai_clues[:blacks]} -- WHITES: #{ai_clues[:whites]} \n"
+		def draw_board(plr_guess, ai_clues, turn)
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} BLACKS: #{ai_clues[:blacks]} WHITES: #{ai_clues[:whites]} Turn: #{turn}\n"
 			puts @board
 		end
 	end
@@ -98,17 +91,17 @@ class MasterMind
 	def play
 		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
 		loop do
-			puts "Turn: #{@@turn} --- Numberwang: #{@AI.numberwang}"
+			# puts "Turn: #{@@turn} --- Numberwang: #{@AI.numberwang}"
 		  	@player.get_guess
 		  	@AI.eval(@player.guess)
-		  	@board.draw_board(@player.guess, @AI.clues)
-			break if numberwang? || game_over?
+		  	@board.draw_board(@player.guess, @AI.clues, @@turn)
+			break if numberwang? || game_over?(@AI.numberwang)
 		end
 	end
 
-	def game_over?		
+	def game_over?(nwang)		
 		if @@turn == 10
-			puts " *** Times Up, see you next week on NUMBERWANG! ***"
+			puts " *** Times Up, see you next week on NUMBERWANG! ***\n This weeks Numberwang was ... * #{nwang} *"
 			return true
 		end
 		@@turn += 1
@@ -116,7 +109,7 @@ class MasterMind
 	end
 
 	def numberwang?
-	  if @AI.numberwang.sort == @player.guess.sort 
+	  if @AI.numberwang == @player.guess
 	  	puts "\n *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
 	  	return true
 	  end
