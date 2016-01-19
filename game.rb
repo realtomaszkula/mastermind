@@ -40,11 +40,26 @@ class MasterMind
 		attr_reader :numberwang, :clues
 		def initialize
 			@numberwang = [rand(1..6),rand(1..6),rand(1..6),rand(1..6)]
-			@clues = []
 		end
 
 		def eval(plr_guess)
+			@clues = {
+				blacks: 0,
+				whites: 0
+			}
 			
+			temp = @numberwang
+			indx = []
+
+
+			for i in 0..5
+				indx << i if temp[i] == plr_guess[i]
+			end
+			indx.each_with_index {|x, i| temp.delete_at(x-i)}
+			clues[:blacks] = temp.size
+
+
+
 		end
 		
 	end
@@ -58,7 +73,7 @@ class MasterMind
 		end
 
 		def draw_board(plr_guess, ai_clues)
-			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- BLACK: xx, WHITE: xx\n" #black for correct pos+color, white for correct color
+			@board << "#{plr_guess[0]}  - #{plr_guess[1]} - #{plr_guess[2]} - #{plr_guess[3]} -- #{ai_clues[:blacks]} -- #{ai_clues[:whites]} \n"
 			puts @board
 		end
 	end
@@ -66,7 +81,7 @@ class MasterMind
 	def play
 		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
 		loop do
-			puts "Turn: #{@@turn}"
+			puts "Turn: #{@@turn} --- Numberwang: #{@AI.numberwang}"
 		  	@player.get_guess
 		  	@AI.eval(@player.guess)
 		  	@board.draw_board(@player.guess, @AI.clues)
