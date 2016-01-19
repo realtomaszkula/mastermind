@@ -8,7 +8,7 @@ class MasterMind
 	end	
 
 	class Player
-		attr_reader :name
+		attr_reader :name, :guess
 		def initialize(name)
 			@name = name
 		end
@@ -24,6 +24,7 @@ class MasterMind
 			@guess = guess.to_s.split("").map(&:to_i)
 		end
 
+		private
 		def validate_input(guess)
 			if guess.class != Fixnum || guess.to_s.size != 4
 				puts "Incorrect input, try again"
@@ -73,14 +74,19 @@ class MasterMind
 		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
 		@player.get_guess
 		@board.view_board
+		if game_over?
+			puts " *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{@player.guess}\n*************************************"
+		end
+
 		@AI.view_numberwang
 	end
 
+
+
 	def game_over?
-	  return true if @AI.numberwang = @player.guess
+	  return true if @AI.numberwang.sort == @player.guess.sort
 	  false
 	end
-
 end
 
 
