@@ -16,23 +16,14 @@ class MasterMind
 		def get_guess
 			puts "#{@name}, enter your guess:"
 			guess = gets.chomp.to_i
-
-			until validate_input(guess)
+			
+			until guess.between?(1111,6666)
+				puts "Incorrect input, try again"
 				guess = gets.chomp.to_i
 			end
 
 			@guess = guess.to_s.split("").map(&:to_i)
 		end
-
-		private
-		def validate_input(guess)
-			if guess.class != Fixnum || guess.to_s.size != 4 || guess > 6666
-				puts "Incorrect input, try again"
-				return false
-			end
-			true
-		end
-
 	end
 
 	class AI
