@@ -3,21 +3,43 @@ class MasterMind
 		@player = Player.new(name, code)
 		@computer = AI.new
 		@turn = 1
+		@win = false
 		game_play
 	end
 
 	Player = Struct.new(:name, :code)
 
 	class AI
-		attr_reader :name, :guess, :guess_again
+		attr_reader :name, :guess, :guess_again, :memory
 		def initialize
 			@name = "NUM_WANG_#{rand(3000)}"
 			@guess = [rand(1..6),rand(1..6),rand(1..6),rand(1..6)]
-			@memory = []
+			@memory = nil
 		end
 
 		def guess_again
-			@guess = [rand(1..6),rand(1..6),rand(1..6),rand(1..6)]
+			new_guess = []
+			blacks = @memory[:blacks]
+			whites = @memory[:whites]
+			new_num = 4 - blacks - whites
+
+			for i in 0..blacks-1
+				new_guess << @guess[i]
+			end
+
+			for i in 0..new_num-1
+				new_guess << rand(1..6)
+			end	
+
+			for i in 0..whites-1
+				new_guess << @guess[blacks]
+			end	
+
+			@guess = new_guess
+		end
+
+		def commit_to_memory(clues)
+			@memory = clues
 		end
 	end
 
@@ -61,10 +83,17 @@ class MasterMind
 
 			@clues[:blacks] = 4 - temp_plr_code.size
 			@clues[:whites] = eval_whites(temp_plr_code, temp_ai_guess)
+
+			@clues
 	end
 
 	def victory(ai_guess)
 		puts "\n *** THAAAATS NUMBERWANG!!! ***\n\tWinning number:\n\t#{ai_guess}\n*************************************"
+		@win = true
+	end
+
+	def defeat
+		puts " *** Times Up, see you next week on NUMBERWANG! ***\n This weeks Numberwang was ... * #{@player.code} *"
 	end
 
 	def change_turn
@@ -75,12 +104,16 @@ class MasterMind
 	def game_play
 		puts "#{@player.name} vs #{@computer.name}"
 		
-		while @turn < 11
+		while @turn < 11 && !@win
+		 
+		  clues = eval(@computer.guess, @player.code)	
+		  @computer.commit_to_memory(clues)
 		  p @computer.guess
-		  eval(@computer.guess, @player.code)
-		  change_turn
+		  p @computer.memory
 		  @computer.guess_again
+		  change_turn
 		end
+		defeat unless @win
 	end
 
 end
