@@ -9,9 +9,8 @@ until input == "1" || input == "2"
 end
 
 case input
-when "1"
-  load 'create_the_code.rb'
-when "2"
-  load 'crack_the_code.rb'
+when "1" then load 'create_the_code.rb' 
+when "2" then load 'crack_the_code.rb' 
 end
+
 

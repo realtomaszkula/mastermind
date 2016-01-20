@@ -16,7 +16,7 @@ class MasterMind
 		def get_guess
 			puts "#{@name}, enter your guess:"
 			guess = gets.chomp.to_i
-			
+
 			until guess.between?(1111,6666)
 				puts "Incorrect input, try again"
 				guess = gets.chomp.to_i
@@ -45,7 +45,7 @@ class MasterMind
 			temp_wang, temp_plr = eval_blacks(plr_guess, temp_wang, temp_plr)
 
 			@clues[:blacks] = 4 - temp_wang.size
-			@clues[:whites] = eval_whites(plr_guess, temp_wang, temp_plr)
+			@clues[:whites] = eval_whites(temp_wang, temp_plr)
 		end
 
 
@@ -59,7 +59,7 @@ class MasterMind
 			return results = [temp_wang, temp_plr]
 		end
 
-		def eval_whites(plr_guess, temp_wang, temp_plr)
+		def eval_whites(temp_wang, temp_plr)
 			counter = 0
 			alr_chkd = []
 			for i in 0..temp_wang.size-1
