@@ -1,7 +1,9 @@
-Mastermind game for Odin Project
+<h2>Mastermind game for Odin Project</h1>
 
-main.rb is a simple menu where you get to choose wether you want to crack the code or create the code for the computer to crack.
-crack_the_code.rb and create_the_code.rb are standalone and perform what their names suggest.
+<ul>
+<li>main.rb is a simple menu where you get to choose wether you want to crack the code or create the code for the computer to crack.</li>
+<li>crack_the_code.rb and create_the_code.rb are standalone and perform what their names suggest.</li>
+</ul>
 
 Instead of colors you will be using 1,2,3,4,5,6. 
 
