@@ -1,6 +1,3 @@
-
-
-
 puts %{*** Hello, welcome to NUMBERWANG ***
 ENTER PLAYER NAME:}
 plr = gets.chomp
@@ -20,7 +17,3 @@ when "2"
   load 'crack_the_code.rb'
 end
 
-
-
-
-load 'game.rb'

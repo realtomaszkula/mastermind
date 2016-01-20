@@ -126,9 +126,6 @@ class MasterMind
 	end
 end
 
-
-puts %{*** Hello, welcome to NUMBERWANG ***
-ENTER PLAYER NAME:}
-
-plr = gets.chomp
-MasterMind.new(plr)
+puts "Enter name:"
+name = gets.chomp
+MasterMind.new(name)
