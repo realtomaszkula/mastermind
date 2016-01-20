@@ -1,4 +1,5 @@
 class MasterMind
+	attr_reader :win
 	def initialize(name, code)
 		@player = Player.new(name, code)
 		@computer = AI.new
@@ -108,8 +109,12 @@ class MasterMind
 		 
 		  clues = eval(@computer.guess, @player.code)	
 		  @computer.commit_to_memory(clues)
-		  p @computer.guess
-		  p @computer.memory
+
+		  unless @win
+		  	p @computer.guess
+		  	p @computer.memory
+		  end
+
 		  @computer.guess_again
 		  change_turn
 		end
@@ -119,10 +124,8 @@ class MasterMind
 end
 
 
-# puts "Enter name:"
-# name = gets.chomp
-
-name = "Tom"
+puts "Enter name:"
+name = gets.chomp
 
 puts "Enter secret code:"
 code = gets.chomp.to_i
@@ -133,5 +136,19 @@ until code.between?(1111,6666)
 end
 
 code = code.to_s.split("").map(&:to_i)
-
 MasterMind.new(name, code)
+
+# ### UNCOMMENT TO TEST THE WINRATE
+# ### 8,68% winrate after 1 000 000 runs
+# ### test for 100 000 or you will have to wait for 2min
+# ### You also need to remove some p and puts to clean up the wintest or you will have to deal with console output spam while the test is running
+# wins = 0
+#  100_000.times do 
+# 	single_game = MasterMind.new(name, code)
+# 	wins += 1 if single_game.win 
+# end 
+
+# puts "\t#{wins} out of 100_000\n\t AI winrate = #{wins.to_f / 100000.to_f * 100}%"
+
+
+
