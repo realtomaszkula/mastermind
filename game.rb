@@ -1,5 +1,4 @@
 class MasterMind
-	@@turn = 1
 	def initialize(name)
 		@player = Player.new(name)
 		@board = Board.new
