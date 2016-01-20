@@ -4,7 +4,7 @@ class MasterMind
 		@player = Player.new(name)
 		@board = Board.new
 		@AI = AI.new
-		
+		@turn = 1
 		play
 	end	
 
@@ -48,32 +48,43 @@ class MasterMind
 				blacks: 0,
 				whites: 0
 			}
-			
-			indx = []
+
 			temp_wang = numberwang.dup
 			temp_plr = plr_guess.dup
+			
+			temp_wang, temp_plr = eval_blacks(plr_guess, temp_wang, temp_plr)
 
+			@clues[:blacks] = 4 - temp_wang.size
+			@clues[:whites] = eval_whites(plr_guess, temp_wang, temp_plr)
+		end
+
+
+		def eval_blacks(plr_guess, temp_wang, temp_plr)
+			indx = []
 			for i in 0..3
 				indx << i if temp_wang[i] == plr_guess[i]
 			end
 			indx.each_with_index {|x, i| temp_wang.delete_at(x-i)}
 			indx.each_with_index {|x, i| temp_plr.delete_at(x-i)}
-			@clues[:blacks] = 4 - temp_wang.size
+			return results = [temp_wang, temp_plr]
+		end
 
+		def eval_whites(plr_guess, temp_wang, temp_plr)
+			counter = 0
 			alr_chkd = []
 			for i in 0..temp_wang.size-1
 				for k in 0..temp_wang.size-1
 					if temp_plr[i] == temp_wang[k] && !alr_chkd.include?(k)
-							@clues[:whites] += 1
+							counter += 1
 							alr_chkd << k
 							next
 					end	
 				end
 			end
+			counter
 		end
-		
-	end
 
+	end
 	class Board
 		attr_reader :board
 		attr_writer :guess
@@ -91,20 +102,19 @@ class MasterMind
 	def play
 		puts "Welcome #{@player.name}\!\nComputer generated NUUUUMBERWANG, can you guess what it is?\n ? - ? - ? - ?"
 		loop do
-			# puts "Turn: #{@@turn} --- Numberwang: #{@AI.numberwang}"
 		  	@player.get_guess
 		  	@AI.eval(@player.guess)
-		  	@board.draw_board(@player.guess, @AI.clues, @@turn)
+		  	@board.draw_board(@player.guess, @AI.clues, @turn)
 			break if numberwang? || game_over?(@AI.numberwang)
 		end
 	end
 
 	def game_over?(nwang)		
-		if @@turn == 10
+		if @turn == 10
 			puts " *** Times Up, see you next week on NUMBERWANG! ***\n This weeks Numberwang was ... * #{nwang} *"
 			return true
 		end
-		@@turn += 1
+		@turn += 1
 		false
 	end
 
